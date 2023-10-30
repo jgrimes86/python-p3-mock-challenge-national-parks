@@ -1,7 +1,10 @@
 class NationalPark:
 
+    all = []
+
     def __init__(self, name):
         self.name = name
+        NationalPark.all.append(self)
 
     def __repr__(self):
         return f"<NationalPark: {self.name}>"
@@ -27,10 +30,31 @@ class NationalPark:
         return list({trip.visitor for trip in self.trips()})
     
     def total_visits(self):
-        pass
+        return len(self.trips())
     
     def best_visitor(self):
-        pass
+        park_visits = [trip.visitor for trip in self.trips()]
+        current_visitor = []
+        num_of_visits = 0
+        for person in self.visitors():
+            if park_visits.count(person) > num_of_visits:
+                current_visitor = person
+                num_of_visits = park_visits.count(person)
+        if current_visitor == []:
+            return None
+        else:
+            return current_visitor
+
+    @classmethod
+    def most_visited(cls):
+        most_visited_park = []
+        most_visits = 0
+        for np in cls.all:
+            if np.total_visits() > most_visits:
+                most_visited_park = np
+                most_visits = np.total_visits()
+        return most_visited_park
+
 
 
 
@@ -133,4 +157,4 @@ class Visitor:
         return list({trip.national_park for trip in self.trips()})
     
     def total_visits_at_park(self, park):
-        pass
+        return len([trip.national_park for trip in self.trips() if trip.national_park == park])
