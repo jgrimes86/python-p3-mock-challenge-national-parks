@@ -21,10 +21,10 @@ class NationalPark:
             raise Exception("Cannot rename National Park.")
 
     def trips(self):
-        pass
+        return [trip for trip in Trip.all if trip.national_park == self]
     
     def visitors(self):
-        pass
+        return list({trip.visitor for trip in self.trips()})
     
     def total_visits(self):
         pass
@@ -37,14 +37,17 @@ class NationalPark:
 
 class Trip:
     
+    all = []
+
     def __init__(self, visitor, national_park, start_date, end_date):
         self.visitor = visitor
         self.national_park = national_park
         self.start_date = start_date
         self.end_date = end_date
+        Trip.all.append(self)
 
     def __repr__(self):
-        return f"Trip: {self.visitor.name} visited {self.national_park.name} from {self.start_date} to {self.end_date}"
+        return f"<Trip: {self.visitor.name} visited {self.national_park.name} from {self.start_date} to {self.end_date}>"
 
     @classmethod
     def date_checker(cls, date):
@@ -79,6 +82,29 @@ class Trip:
         else:
             raise Exception("End date must be in the form of: 'September 1st'.")
 
+    @property
+    def visitor(self):
+        return self._visitor
+    
+    @visitor.setter
+    def visitor(self, new_visitor):
+        if isinstance(new_visitor, Visitor):
+            self._visitor = new_visitor
+        else:
+            raise Exception("Visotor must be an instance of Visitor class.")
+
+    @property
+    def national_park(self):
+        return self._national_park
+
+    @national_park.setter
+    def national_park(self, new_national_park):
+        if isinstance(new_national_park, NationalPark):
+            self._national_park = new_national_park
+        else:
+            raise Exception("National Park must be an instance of NationalPark class.")
+
+
 
 
 class Visitor:
@@ -101,10 +127,10 @@ class Visitor:
             raise Exception("Name must be a string with at least 1 and up to 15 characters.")
         
     def trips(self):
-        pass
+        return [trip for trip in Trip.all if trip.visitor == self]
     
     def national_parks(self):
-        pass
+        return list({trip.national_park for trip in self.trips()})
     
     def total_visits_at_park(self, park):
         pass
