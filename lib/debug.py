@@ -8,4 +8,10 @@ from classes.many_to_many import Trip
 if __name__ == '__main__':
     print("HELLO! :) let's debug :vibing_potato:")
 
-    ipdb.set_trace()
+
+np1 = NationalPark("Grand Canyon")
+
+v1 = Visitor("Sam")
+
+
+ipdb.set_trace()
